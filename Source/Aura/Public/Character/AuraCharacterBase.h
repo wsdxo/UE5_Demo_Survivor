@@ -3,11 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "AuraCharacterBase.generated.h"
 
+
+class UAbilitySystemComponent;
+class UAttributeSet;
 UCLASS()
-class AURA_API AAuraCharacterBase : public ACharacter
+class AURA_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -35,6 +39,14 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
 	void TakeDamage(float AttackValue);
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Ability")
+	UAbilitySystemComponent* AbilitySystemComponent;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Ability")
+	UAttributeSet* AttributeSet;
 private:
 };

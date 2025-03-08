@@ -3,6 +3,7 @@
 
 #include "Character/AuraEnemy.h"
 
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "Character/AuraCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -17,11 +18,9 @@ AAuraEnemy::AAuraEnemy()
 	
 	GetCapsuleComponent()->SetCollisionProfileName("Pawn");
 	GetCapsuleComponent()->SetGenerateOverlapEvents(true);
-	// GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	// GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
-	// GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
-	// GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+	AttributeSet=CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 }
 
 void AAuraEnemy::BeginPlay()
@@ -46,7 +45,6 @@ void AAuraEnemy::Tick(float DeltaSeconds) {
 			GetActorLocation() + Direction * 100.f, 10.f, FColor::Red);
 		GetMovementComponent()->AddInputVector(Direction);
 	}
-	// 在Tick中添加速度打印
 	FVector CurrentVelocity = GetVelocity();
 	UE_LOG(LogTemp, Warning, TEXT("Speed: %f"), CurrentVelocity.Size());
 }
