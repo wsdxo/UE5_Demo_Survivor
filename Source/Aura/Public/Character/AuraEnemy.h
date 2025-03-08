@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/AuraCharacterBase.h"
+#include "Runtime/AIModule/Classes/AIController.h"
 #include "AuraEnemy.generated.h"
 
 /**
@@ -32,6 +33,8 @@ private:
 		bool bFromSweep, const FHitResult& SweepResult);
 
 	APawn* PlayerPawn;
-	
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AAIController>EnemyControllerClass;
 	
 };

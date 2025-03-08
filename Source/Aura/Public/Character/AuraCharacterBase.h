@@ -19,6 +19,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	//TODO:Use GAS change this
+	UPROPERTY(EditAnywhere,Category="Damage")
+	float MaxHealth;
+	UPROPERTY(EditAnywhere,Category="Damage")
+	float CurrentHealth;
+
+	UPROPERTY(EditAnywhere,Category="Damage")
+	float Attack;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -26,6 +35,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
-	
+	void TakeDamage(float AttackValue);
+private:
 };

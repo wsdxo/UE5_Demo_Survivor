@@ -34,9 +34,6 @@ public:
 	UPROPERTY(EditAnywhere,Category="Spawn Settings")
 	int32 MaxEnemyCount;
 
-	UPROPERTY(EditAnywhere,Category="Components")
-	UBoxComponent* SpawnArea;
-
 private:
 	FTimerHandle SpawnTimerHandle;
 	TArray<AAuraEnemy*>ActiveEnemies;
