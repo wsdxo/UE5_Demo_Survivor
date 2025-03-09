@@ -29,6 +29,12 @@ protected:
 	UPROPERTY(EditAnywhere,Category="Damage")
 	float CurrentHealth;
 
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Ability")
+	UAbilitySystemComponent* AbilitySystemComponent;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Ability")
+	UAttributeSet* AttributeSet;
+
 	UPROPERTY(EditAnywhere,Category="Damage")
 	float Attack;
 
@@ -42,11 +48,5 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	void TakeDamage(float AttackValue);
-
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Ability")
-	UAbilitySystemComponent* AbilitySystemComponent;
-
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Ability")
-	UAttributeSet* AttributeSet;
 private:
 };

@@ -3,6 +3,7 @@
 
 #include "Character/AuraEnemy.h"
 
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Character/AuraCharacter.h"
 #include "Components/CapsuleComponent.h"
@@ -20,12 +21,20 @@ AAuraEnemy::AAuraEnemy()
 	GetCapsuleComponent()->SetGenerateOverlapEvents(true);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 
+	AbilitySystemComponent=CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	
 	AttributeSet=CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 }
 
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//Init ActorInfo
+	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AAuraEnemy::OnCollisionBegin);
 	check(EnemyControllerClass);
