@@ -3,6 +3,7 @@
 
 #include "Character/AuraEnemy.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Character/AuraCharacter.h"
@@ -26,6 +27,8 @@ AAuraEnemy::AAuraEnemy()
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 	
 	AttributeSet=CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
+
+	
 }
 
 void AAuraEnemy::BeginPlay()
@@ -58,14 +61,27 @@ void AAuraEnemy::Tick(float DeltaSeconds) {
 	UE_LOG(LogTemp, Warning, TEXT("Speed: %f"), CurrentVelocity.Size());
 }
 
+void AAuraEnemy::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
+{
+	UAbilitySystemComponent* TargetASC=UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+	if(!TargetASC)return;
+	check(GameplayEffectClass);
+	FGameplayEffectContextHandle EffectContextHandle=TargetASC->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+
+	FGameplayEffectSpecHandle EffectSpecHandle=TargetASC->MakeOutgoingSpec(GameplayEffectClass,Level,EffectContextHandle);
+
+	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+}
+
+
 void AAuraEnemy::OnCollisionBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
                                   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,TEXT("碰撞"));
 	if(OtherActor&&OtherActor->IsA(AAuraCharacter::StaticClass()))
 	{
 		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,TEXT("与玩家碰撞"));
-		Cast<AAuraCharacter>(PlayerPawn)->TakeDamage(Attack);
+		ApplyEffectToTarget(OtherActor,InstantGameplayEffect);
 		Destroy();
 	}
 }

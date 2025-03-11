@@ -42,9 +42,11 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
-void AAuraCharacterBase::TakeDamage(float AttackValue)
+void AAuraCharacterBase::AddCharacterAbilities()
 {
-	float TempHealth=CurrentHealth-AttackValue;
-	CurrentHealth=FMath::Clamp(TempHealth,0,MaxHealth);
+	UAuraAbilitySystemComponent* AuraASC=CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	if(!HasAuthority())return;
+	AuraASC->AddCharacterAbilities(StartUpAbilities);
 }
+
 

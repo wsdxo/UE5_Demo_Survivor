@@ -3,6 +3,8 @@
 
 #include "Character/AuraCharacter.h"
 
+#include <ThirdParty/Breakpad/src/third_party/llvm/cxxabi.h>
+
 #include "AbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/AuraPlayerState.h"
@@ -36,12 +38,26 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	InitAbilityActorInfo();
+	AddCharacterAbilities();
 }
 
 void AAuraCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 	InitAbilityActorInfo();
+}
+
+void AAuraCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	for (const FGameplayAbilitySpec& Spec:GetAbilitySystemComponent()->GetActivatableAbilities())
+	{
+		UGameplayAbility* Ability=Spec.Ability;
+		if (Ability&&!Spec.IsActive())
+		{
+			GetAbilitySystemComponent()->TryActivateAbility(Spec.Handle);
+		}
+	}
 }
 
 void AAuraCharacter::InitAbilityActorInfo()

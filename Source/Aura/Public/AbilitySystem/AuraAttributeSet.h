@@ -25,14 +25,16 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 
 public:
 
+	UAuraAttributeSet();
+	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxHealth)
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere,ReplicatedUsing=OnRep_MaxHealth,BlueprintReadWrite)
 	FGameplayAttributeData MaxHealth;
 
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Health)
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere,ReplicatedUsing=OnRep_Health,BlueprintReadWrite)
 	FGameplayAttributeData Health;
 
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Attack)
@@ -58,5 +60,13 @@ public:
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Level)
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
 	FGameplayAttributeData Level;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION()
+	void OnRep_MaxHealth(const FGameplayAttributeData& OldValue) const;
+
+	UFUNCTION()
+	void OnRep_Health(const FGameplayAttributeData& OldValue) const;
 	
 };

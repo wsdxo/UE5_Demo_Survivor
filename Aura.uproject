@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{A337D917-48F1-670B-2472-109276EB1B2A}",
+	"EngineAssociation": "{4D1BCEE2-4058-095D-BCA3-12A652AE692C}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -10,7 +10,9 @@
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
 				"Engine",
-				"GameplayAbilities"
+				"GameplayAbilities",
+				"UMG",
+				"CoreUObject"
 			]
 		}
 	],

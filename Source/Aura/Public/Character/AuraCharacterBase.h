@@ -8,6 +8,7 @@
 #include "AuraCharacterBase.generated.h"
 
 
+class UGameplayAbility;
 class UAbilitySystemComponent;
 class UAttributeSet;
 UCLASS()
@@ -30,10 +31,10 @@ protected:
 	float CurrentHealth;
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Ability")
-	UAbilitySystemComponent* AbilitySystemComponent;
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Ability")
-	UAttributeSet* AttributeSet;
+	TObjectPtr<UAttributeSet> AttributeSet;
 
 	UPROPERTY(EditAnywhere,Category="Damage")
 	float Attack;
@@ -47,6 +48,11 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
-	void TakeDamage(float AttackValue);
+	UAttributeSet* GetAttributeSet()const{return AttributeSet;}
+
+	void AddCharacterAbilities();
 private:
+
+	UPROPERTY(EditAnywhere,Category="Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartUpAbilities;
 };

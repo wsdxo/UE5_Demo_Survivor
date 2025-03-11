@@ -7,6 +7,7 @@
 #include "Runtime/AIModule/Classes/AIController.h"
 #include "AuraEnemy.generated.h"
 
+class UGameplayEffect;
 /**
  * 
  */
@@ -23,8 +24,19 @@ protected:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	UFUNCTION(BlueprintCallable)
+
+	void ApplyEffectToTarget(AActor* TargetActor,TSubclassOf<UGameplayEffect> GameplayEffectClass);
+	
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Apply Effect")
+	TSubclassOf<UGameplayEffect> InstantGameplayEffect;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Apply Effect")
+	float Level=1;
+
 	UPROPERTY(EditDefaultsOnly, Category="Movement")
 	float MoveSpeed = 500.0f;
+
 
 private:
 	UFUNCTION()
