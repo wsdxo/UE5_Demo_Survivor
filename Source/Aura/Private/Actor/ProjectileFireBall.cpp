@@ -30,6 +30,8 @@ void AProjectileFireBall::BeginPlay()
 	Super::BeginPlay();
 	
 	Sphere->OnComponentBeginOverlap.AddDynamic(this,&AProjectileFireBall::OnSphereBeginOverlap);
+
+	SetLifeSpan(10);
 }
 
 // Called every frame

@@ -15,6 +15,20 @@ class AURA_API UGA_Death : public UAuraGameplayAbility
 	GENERATED_BODY()
 	
 	
+public:
+
+	UGA_Death();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void ShowDeathUI();
 	
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+protected:
+	UPROPERTY(EditDefaultsOnly,Category="DeathUI")
+	TSubclassOf<UUserWidget>DeathUIClass;
+
+	UPROPERTY()
+	TObjectPtr<UUserWidget>DeathUIInstance;
 	
 };

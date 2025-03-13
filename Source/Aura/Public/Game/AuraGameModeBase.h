@@ -14,7 +14,10 @@ class AURA_API AAuraGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	AAuraGameModeBase();
 	
-	
-	
+	UFUNCTION(BlueprintCallable)
+	void ReStartGame();
+
 };

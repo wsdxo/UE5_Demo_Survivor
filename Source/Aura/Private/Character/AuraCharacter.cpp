@@ -6,6 +6,8 @@
 #include <ThirdParty/Breakpad/src/third_party/llvm/cxxabi.h>
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
+#include "AbilitySystem/Abilities/GA_Death.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/AuraPlayerController.h"
 #include "Player/AuraPlayerState.h"
@@ -59,7 +61,8 @@ void AAuraCharacter::Tick(float DeltaSeconds)
 		UGameplayAbility* Ability=Spec.Ability;
 		if (Ability&&!Spec.IsActive())
 		{
-			GetAbilitySystemComponent()->TryActivateAbility(Spec.Handle);
+			if(!Ability->IsA(UGA_Death::StaticClass()))
+				GetAbilitySystemComponent()->TryActivateAbility(Spec.Handle);
 		}
 	}
 }
@@ -80,4 +83,5 @@ void AAuraCharacter::InitAbilityActorInfo()
 			AuraHUD->InitOverlay(AuraPlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet);
 		}
 	}
+	Cast<UAuraAttributeSet>(AttributeSet)->InitAttributes();
 }

@@ -48,5 +48,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AAIController>EnemyControllerClass;
+
+public:
+	virtual void AddCharacterAbilities() override;
 	
 };

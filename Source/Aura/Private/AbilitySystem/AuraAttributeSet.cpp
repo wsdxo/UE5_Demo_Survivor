@@ -3,10 +3,16 @@
 
 #include "AbilitySystem/AuraAttributeSet.h"
 
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Net/UnrealNetwork.h"
 
 
 UAuraAttributeSet::UAuraAttributeSet()
+{
+	InitAttributes();
+}
+
+void UAuraAttributeSet::InitAttributes()
 {
 	InitMaxHealth(100);
 	InitHealth(100);
@@ -15,9 +21,21 @@ UAuraAttributeSet::UAuraAttributeSet()
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
+
 	if(Attribute==GetHealthAttribute())
 	{
 		NewValue=FMath::Clamp(NewValue,0,GetMaxHealth());
+
+		if(NewValue<=0&&GetHealth()>0)
+		{
+			GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,TEXT("Death"));
+			if(UAbilitySystemComponent* AbilitySystemComponent=GetOwningAbilitySystemComponent())
+			{
+				FGameplayTagContainer DeathTag;
+				DeathTag.AddTag(FGameplayTag::RequestGameplayTag("Ability.Death"));
+				AbilitySystemComponent->TryActivateAbilitiesByTag(DeathTag);
+			}
+		}
 	}
 }
 

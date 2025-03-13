@@ -26,6 +26,8 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 public:
 
 	UAuraAttributeSet();
+
+	void InitAttributes();
 	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	

@@ -3,6 +3,7 @@
 
 #include "Actor/EnemySpawner.h"
 
+#include "Game/AuraGameStateBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -18,6 +19,8 @@ void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle,this,&AEnemySpawner::SpawnEnemy,SpwanInterval,true);
+
+	Cast<AAuraGameStateBase>(GetWorld()->GetGameState())->EnemySpawners.Add(this);
 }
 
 // Called every frame
@@ -29,26 +32,27 @@ void AEnemySpawner::Tick(float DeltaTime)
 
 void AEnemySpawner::SpawnEnemy()
 {
-	if(ActiveEnemies.Num()>=MaxEnemyCount)return;
+	AAuraGameStateBase* GameState = GetWorld()->GetGameState<AAuraGameStateBase>();
+	if (!GameState || GameState->ActiveEnemies.Num() >= MaxEnemyCount) return;
 
-	if(EnemyClass)
+	if (EnemyClass)
 	{
 		const FVector Location = GetActorLocation();
-        
-		if(AAuraEnemy* NewEnemy = GetWorld()->SpawnActor<AAuraEnemy>(EnemyClass,Location,FRotator::ZeroRotator))
+		if (AAuraEnemy* NewEnemy = GetWorld()->SpawnActor<AAuraEnemy>(EnemyClass, Location, FRotator::ZeroRotator))
 		{
 			NewEnemy->OnDestroyed.AddDynamic(this, &AEnemySpawner::OnEnemyDestroyed);
-			ActiveEnemies.Add(NewEnemy);
+			GameState->AddEnemy(NewEnemy);
 		}
-		
 	}
 }
 
 void AEnemySpawner::OnEnemyDestroyed(AActor* DestroyedActor)
 {
+	AAuraGameStateBase* GameState=GetWorld()->GetGameState<AAuraGameStateBase>();
+	if(!GameState)return;
 	if(AAuraEnemy* Enemy=Cast<AAuraEnemy>(DestroyedActor))
 	{
-		ActiveEnemies.Remove(Enemy);
+		GameState->RemoveEnemy(Enemy);
 	}
 }
 

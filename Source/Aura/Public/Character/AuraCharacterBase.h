@@ -39,6 +39,9 @@ protected:
 	UPROPERTY(EditAnywhere,Category="Damage")
 	float Attack;
 
+	UPROPERTY(EditAnywhere,Category="Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartUpAbilities;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -50,9 +53,8 @@ public:
 
 	UAttributeSet* GetAttributeSet()const{return AttributeSet;}
 
-	void AddCharacterAbilities();
+	virtual void AddCharacterAbilities();
 private:
 
-	UPROPERTY(EditAnywhere,Category="Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> StartUpAbilities;
+
 };

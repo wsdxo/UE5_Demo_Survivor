@@ -44,13 +44,15 @@ void AAuraEnemy::BeginPlay()
 	Controller=GetWorld()->SpawnActor<AAIController>(EnemyControllerClass);
 	PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+
+	AddCharacterAbilities();
 	
 }
 
 void AAuraEnemy::Tick(float DeltaSeconds) {
 	Super::Tick(DeltaSeconds);
-	if(PlayerPawn && GetCharacterMovement()) {
-		
+	if(IsValid(PlayerPawn) && GetCharacterMovement())
+	{
 		FVector DirectionToPlayer = PlayerPawn->GetActorLocation() - GetActorLocation();
 		FVector Direction=DirectionToPlayer.GetSafeNormal();
 		DrawDebugDirectionalArrow(GetWorld(), GetActorLocation(), 
@@ -82,6 +84,13 @@ void AAuraEnemy::OnCollisionBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 	{
 		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,TEXT("与玩家碰撞"));
 		ApplyEffectToTarget(OtherActor,InstantGameplayEffect);
-		Destroy();
+		//Destroy();
 	}
+}
+
+void AAuraEnemy::AddCharacterAbilities()
+{
+	UAuraAbilitySystemComponent* AuraASC=CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	if(!HasAuthority())return;
+	AuraASC->AddCharacterAbilities(StartUpAbilities);
 }
