@@ -71,7 +71,7 @@ void AAuraEnemy::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayE
 	FGameplayEffectContextHandle EffectContextHandle=TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
 
-	FGameplayEffectSpecHandle EffectSpecHandle=TargetASC->MakeOutgoingSpec(GameplayEffectClass,Level,EffectContextHandle);
+	FGameplayEffectSpecHandle EffectSpecHandle=TargetASC->MakeOutgoingSpec(GameplayEffectClass,static_cast<float>(GetPlayerLevel()),EffectContextHandle);
 
 	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 }
@@ -82,7 +82,6 @@ void AAuraEnemy::OnCollisionBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 {
 	if(OtherActor&&OtherActor->IsA(AAuraCharacter::StaticClass()))
 	{
-		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,TEXT("与玩家碰撞"));
 		ApplyEffectToTarget(OtherActor,InstantGameplayEffect);
 		//Destroy();
 	}

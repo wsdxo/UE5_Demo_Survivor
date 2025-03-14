@@ -5,6 +5,8 @@
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "Character/AuraCharacter.h"
+#include "Player/AuraPlayerController.h"
 
 
 AAuraPlayerState::AAuraPlayerState()
@@ -21,4 +23,21 @@ AAuraPlayerState::AAuraPlayerState()
 UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AAuraPlayerState::BeginPlay()
+{
+	Super::BeginPlay();
+
+	AddStateAbilities();
+}
+
+void AAuraPlayerState::AddStateAbilities()
+{
+	AAuraPlayerController* AuraPlayerController=Cast<AAuraPlayerController>(GetOwner());
+	if(!AuraPlayerController)return;
+	AAuraCharacter* AuraCharacter=Cast<AAuraCharacter>(AuraPlayerController->GetPawn());
+	UAuraAbilitySystemComponent* AuraASC=CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	if(!HasAuthority())return;
+	AuraASC->AddCharacterAbilities(AuraCharacter->StartUpAbilities);
 }

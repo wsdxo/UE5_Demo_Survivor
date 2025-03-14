@@ -4,6 +4,7 @@
 #include "UI/HUD/AuraHUD.h"
 #include "UI/Widget/AuraUserWidget.h"
 #include "Blueprint/UserWidget.h"
+#include "Character/AuraCharacter.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
 
 
@@ -20,7 +21,7 @@ UOverlayWidgetController* AAuraHUD::GetOverlayWidgetController(const FWidgetCont
 	return OverlayWidgetController;
 }
 
-void AAuraHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
+void AAuraHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS,AAuraCharacter* AuraCharacter)
 {
 	checkf(OverlayWidgetClass,TEXT("OverlayWidgetClass Uninit"));
 	checkf(OverlayWidgetControllerClass,TEXT("OverlayWidgetControllerClass Uninit"))
@@ -28,7 +29,7 @@ void AAuraHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySyst
 
 	OverlayWidget=Cast<UAuraUserWidget>(Widget);
 	
-	const FWidgetControllerParams WidgetControllerParams(PC,PS,ASC,AS);
+	const FWidgetControllerParams WidgetControllerParams(PC,PS,ASC,AS,AuraCharacter);
 	UOverlayWidgetController* WidgetController=GetOverlayWidgetController(WidgetControllerParams);
 
 	OverlayWidget->SetWidgetController(WidgetController);

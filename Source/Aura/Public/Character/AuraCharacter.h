@@ -23,6 +23,7 @@ public:
 
 	virtual void OnRep_PlayerState() override;
 
+
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 	

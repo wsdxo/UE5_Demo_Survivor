@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Character/AuraCharacter.h"
 #include "UObject/NoExportTypes.h"
 #include "AuraWidgetController.generated.h"
 
+class AAuraCharacter;
 class UAttributeSet;
 class UAbilitySystemComponent;
 /**
@@ -17,7 +19,7 @@ struct FWidgetControllerParams
 	GENERATED_BODY()
 
 	FWidgetControllerParams();
-	FWidgetControllerParams(APlayerController* PC,APlayerState* PS,UAbilitySystemComponent* ASC,UAttributeSet* AS):PlayerController(PC),PlayerState(PS),AbilitySystemComponent(ASC),AttributeSet(AS){}
+	FWidgetControllerParams(APlayerController* PC,APlayerState* PS,UAbilitySystemComponent* ASC,UAttributeSet* AS,AAuraCharacter* AC):PlayerController(PC),PlayerState(PS),AbilitySystemComponent(ASC),AttributeSet(AS),AuraCharacter(AC){}
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<APlayerController> PlayerController=nullptr;
@@ -30,6 +32,9 @@ struct FWidgetControllerParams
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<UAttributeSet> AttributeSet=nullptr;
+
+	UPROPERTY()
+	TObjectPtr<AAuraCharacter> AuraCharacter=nullptr;
 };
 
 UCLASS()
@@ -58,4 +63,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly,Category="WidgetController")
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	UPROPERTY()
+	TObjectPtr<AAuraCharacter> PlayerCharacterInstance;
 };

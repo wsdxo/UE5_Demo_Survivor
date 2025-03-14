@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Net/UnrealNetwork.h"
 
 
 // Sets default values
@@ -37,6 +38,13 @@ void AAuraCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 }
 
+void AAuraCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AAuraCharacterBase,Level);
+	DOREPLIFETIME(AAuraCharacterBase,XP);
+}
+
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
@@ -45,6 +53,41 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 void AAuraCharacterBase::AddCharacterAbilities()
 {
 }
+
+void AAuraCharacterBase::AddToXP(int32 InXP)
+{
+	XP+=InXP;
+	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void AAuraCharacterBase::SetXP(int32 InXP)
+{
+	XP=InXP;
+	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void AAuraCharacterBase::AddToLevel(int32 InLevel)
+{
+	Level+=InLevel;
+	OnLevelChangedDelegate.Broadcast(Level);
+}
+
+void AAuraCharacterBase::SetLevel(int32 InLevel)
+{
+	Level=InLevel;
+	OnLevelChangedDelegate.Broadcast(Level);
+}
+
+void AAuraCharacterBase::OnRep_XP(int32 OldXP)
+{
+	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void AAuraCharacterBase::OnRep_Level(int32 OldLevel)
+{
+	OnLevelChangedDelegate.Broadcast(Level);	
+}
+
 
 
 

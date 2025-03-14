@@ -6,6 +6,7 @@
 #include <ThirdParty/Breakpad/src/third_party/llvm/cxxabi.h>
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystem/Abilities/GA_Death.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -53,6 +54,8 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+
+
 void AAuraCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -76,12 +79,14 @@ void AAuraCharacter::InitAbilityActorInfo()
 
 	AttributeSet=AuraPlayerState->GetAttributeSet();
 
+	Cast<UAuraAttributeSet>(AttributeSet)->InitAttributes();
+
 	if(AAuraPlayerController* AuraPlayerController=Cast<AAuraPlayerController>(GetController()))
 	{
 		if(AAuraHUD* AuraHUD=Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
 		{
-			AuraHUD->InitOverlay(AuraPlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet);
+			AuraHUD->InitOverlay(AuraPlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet,this);
 		}
 	}
-	Cast<UAuraAttributeSet>(AttributeSet)->InitAttributes();
+
 }

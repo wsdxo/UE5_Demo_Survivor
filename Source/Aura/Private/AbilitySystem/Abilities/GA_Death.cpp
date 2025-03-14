@@ -4,12 +4,14 @@
 #include "AbilitySystem/Abilities/GA_Death.h"
 
 #include "AbilitySystemComponent.h"
+#include "ShaderPrintParameters.h"
 #include "Actor/EnemySpawner.h"
 #include "Blueprint/UserWidget.h"
 #include "Character/AuraCharacter.h"
 #include "Character/AuraEnemy.h"
 #include "Game/AuraGameStateBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Player/AuraPlayerController.h"
 
 
@@ -21,12 +23,16 @@ UGA_Death::UGA_Death()
 
 void UGA_Death::ShowDeathUI_Implementation()
 {
-	if(IsValid(DeathUIClass)&&!DeathUIInstance)
+	if(IsValid(DeathUIClass))
 	{
 		if(AAuraPlayerController* AuraPlayerController=Cast<AAuraPlayerController>(GetAvatarActorFromActorInfo()->GetInstigatorController()))
 		{
-			DeathUIInstance=CreateWidget<UUserWidget>(AuraPlayerController,DeathUIClass,"DeathUI");
-			if(DeathUIInstance)
+			if(!DeathUIInstance)
+			{
+				DeathUIInstance=CreateWidget<UUserWidget>(AuraPlayerController,DeathUIClass,"DeathUI");
+			}
+
+			if(IsValid(DeathUIInstance))
 			{
 				DeathUIInstance->AddToViewport(100);
 
@@ -57,6 +63,10 @@ void UGA_Death::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
 
 	if(Avatar->IsA(AAuraEnemy::StaticClass()))
 	{
+		AAuraEnemy* Enemy=Cast<AAuraEnemy>(Avatar);
+		int32 XPAward=Enemy->GetXPAward();
+		AAuraCharacter* AuraCharacter=Cast<AAuraCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+		AuraCharacter->AddToXP(XPAward);
 		Avatar->Destroy();
 	}
 	else if(Avatar->IsA(AAuraCharacter::StaticClass()))

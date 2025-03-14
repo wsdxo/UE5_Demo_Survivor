@@ -29,4 +29,8 @@ protected:
 
 	UPROPERTY()
 	UAttributeSet* AttributeSet;
+
+	virtual void BeginPlay() override;
+
+	void AddStateAbilities();
 };

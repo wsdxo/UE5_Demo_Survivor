@@ -31,11 +31,13 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Apply Effect")
 	TSubclassOf<UGameplayEffect> InstantGameplayEffect;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Apply Effect")
-	float Level=1;
+
 
 	UPROPERTY(EditDefaultsOnly, Category="Movement")
 	float MoveSpeed = 500.0f;
+
+	UPROPERTY(EditDefaultsOnly,Category="XP Award")
+	int32 XPAward=50;
 
 
 private:
@@ -51,5 +53,8 @@ private:
 
 public:
 	virtual void AddCharacterAbilities() override;
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetXPAward() const { return XPAward; }
 	
 };
