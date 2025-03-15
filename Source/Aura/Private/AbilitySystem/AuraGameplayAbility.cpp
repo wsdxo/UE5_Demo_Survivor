@@ -3,23 +3,17 @@
 
 #include "AbilitySystem/AuraGameplayAbility.h"
 
-FGameplayAbilityInfo::FGameplayAbilityInfo():
-	CD(0),
-	IconMaterial(nullptr),
-	AbilityClass(nullptr)
-{
 
+FGameplayAbilityInfo::FGameplayAbilityInfo()
+{
+	
 }
 
-FGameplayAbilityInfo::FGameplayAbilityInfo(float CD, UMaterialInstance* IconMaterial, TSubclassOf<UAuraGameplayAbility> AbilityClass):
-	CD(CD),
-	IconMaterial(IconMaterial),
-	AbilityClass(AbilityClass)
+FGameplayAbilityInfo::FGameplayAbilityInfo(float CD, UMaterialInstance* IconMaterial,
+                                           TSubclassOf<UAuraGameplayAbility> AbilityClass)
 {
-
+	
 }
-
-
 
 FGameplayAbilityInfo UAuraGameplayAbility::GetAbilityInfo(int level)
 {
@@ -33,4 +27,10 @@ FGameplayAbilityInfo UAuraGameplayAbility::GetAbilityInfo(int level)
 		return FGameplayAbilityInfo(CD,IconMaterial,GetClass());
 	}
 	return FGameplayAbilityInfo();
+}
+
+void UAuraGameplayAbility::UpgradeAbility()
+{
+	CurrentSkillLevel++;
+	
 }

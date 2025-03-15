@@ -50,5 +50,6 @@ void AProjectileFireBall::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedCo
 		ApplyEffectToTarget(Enemy, InstantGameplayEffectClass);
 		Destroy();
 	}
+	
 }
 

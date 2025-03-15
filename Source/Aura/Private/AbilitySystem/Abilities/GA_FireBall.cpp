@@ -35,5 +35,10 @@ void UGA_FireBall::SpawnFireball() const
 		const FRotator SpawnRotation = Avatar->GetActorRotation();
         
 		AProjectileFireBall* Fireball = GetWorld()->SpawnActor<AProjectileFireBall>(FireBallClass, SpawnLocation, SpawnRotation);
+
+		if(IsValid(Fireball))
+		{
+			Fireball->SetLevel(CurrentSkillLevel);
+		}
 	}
 }

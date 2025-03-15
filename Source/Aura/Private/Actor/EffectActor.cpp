@@ -41,3 +41,9 @@ void AEffectActor::Tick(float DeltaTime)
 
 }
 
+void AEffectActor::SetLevel(float InLevel)
+{
+	Level=InLevel;
+}
+
+

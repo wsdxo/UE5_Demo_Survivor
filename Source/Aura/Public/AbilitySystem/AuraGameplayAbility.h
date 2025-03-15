@@ -6,6 +6,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "AuraGameplayAbility.generated.h"
 
+class UAuraGameplayAbility;
 /**
  * 
  */
@@ -39,6 +40,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AbilityInfo")
 	FGameplayAbilityInfo GetAbilityInfo(int level);
-	
+
+	UPROPERTY(VisibleAnywhere)
+	int32 CurrentSkillLevel = 1;
+
+	UFUNCTION()
+	virtual void UpgradeAbility();
 	
 };

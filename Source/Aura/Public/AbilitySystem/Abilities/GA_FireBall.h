@@ -25,5 +25,7 @@ public:
 	
 private:
 
+
+	
 	void SpawnFireball() const;
 };
