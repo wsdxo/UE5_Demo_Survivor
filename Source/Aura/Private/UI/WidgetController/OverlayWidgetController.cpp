@@ -21,8 +21,6 @@ void UOverlayWidgetController::BroadcastInitialValues()
 
 void UOverlayWidgetController::BindCallBacksToDependencies()
 {
-	PlayerCharacterInstance->OnXPChangedDelegate.AddUObject(this,&UOverlayWidgetController::OnXPChanged);
-	
 	const UAuraAttributeSet* AuraAttributeSet=CastChecked<UAuraAttributeSet>(AttributeSet);
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()
@@ -30,6 +28,9 @@ void UOverlayWidgetController::BindCallBacksToDependencies()
 	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute()
 		).AddUObject(this,&UOverlayWidgetController::MaxHealthChanged);
+
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetXPAttribute()
+		).AddUObject(this,&UOverlayWidgetController::OnXPChanged);
 }
 
 void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data)const
@@ -42,12 +43,12 @@ void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Da
 	OnMaxHealthChanged.Broadcast(Data.NewValue);
 }
 
-void UOverlayWidgetController::OnXPChanged(int32 NewXP)const
+void UOverlayWidgetController::OnXPChanged(const FOnAttributeChangeData& Data)const
 {
-	const ULevelUpInfo* LevelUpInfo=PlayerCharacterInstance->LevelUpInfo;
+	const ULevelUpInfo* LevelUpInfo=Cast<UAuraAttributeSet>(PlayerCharacterInstance->GetAttributeSet())->LevelUpInfo;
 	check(LevelUpInfo);
 
-	const int32 Level=LevelUpInfo->FindLevelForXP(NewXP);
+	const int32 Level=LevelUpInfo->FindLevelForXP(Data.NewValue);
 	const int32 MaxLevel=LevelUpInfo->LevelUpInfos.Num();
 
 	if(Level>MaxLevel||Level<=0)return;
@@ -56,7 +57,7 @@ void UOverlayWidgetController::OnXPChanged(int32 NewXP)const
 	const int32 PreviousLevelRequirement=LevelUpInfo->LevelUpInfos[Level-1].LevelUpRequirement;
 
 	const int32 DeltaLevelUpRequirement=LevelUpRequirement-PreviousLevelRequirement;
-	const int32 XPForThisLevel=NewXP-PreviousLevelRequirement;
+	const int32 XPForThisLevel=Data.NewValue-PreviousLevelRequirement;
 
 	const float XPBarPercent=static_cast<float>(XPForThisLevel)/static_cast<float>(DeltaLevelUpRequirement);
 

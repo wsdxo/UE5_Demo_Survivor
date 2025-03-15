@@ -15,6 +15,7 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+class ULevelUpInfo;
 /**
  * 
  */
@@ -47,21 +48,17 @@ public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
 	FGameplayAttributeData Defense;
 
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Experience)
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
-	FGameplayAttributeData Experience;
-
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxExperience)
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
-	FGameplayAttributeData MaxExperience;
-
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxExperienceMultiplier)
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
-	FGameplayAttributeData MaxExperienceMultiplier;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,XP)
+	UPROPERTY(VisibleAnywhere,ReplicatedUsing=OnRep_XP,BlueprintReadWrite)
+	FGameplayAttributeData XP;
+	
 
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Level)
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere,ReplicatedUsing=OnRep_Level,BlueprintReadWrite)
 	FGameplayAttributeData Level;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<ULevelUpInfo>LevelUpInfo;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -70,5 +67,14 @@ public:
 
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldValue) const;
+
+	UFUNCTION()
+	void OnRep_XP(const FGameplayAttributeData& OldValue)const;
+
+	UFUNCTION()
+	void OnRep_Level(const FGameplayAttributeData& OldValue)const;
+
+	UFUNCTION()
+	float GetCharacterLevel();
 	
 };

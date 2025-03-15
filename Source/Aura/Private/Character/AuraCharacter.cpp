@@ -9,6 +9,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AbilitySystem/Abilities/GA_Death.h"
+#include "AbilitySystem/Abilities/GA_LevelUp.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/AuraPlayerController.h"
 #include "Player/AuraPlayerState.h"
@@ -39,13 +40,14 @@ AAuraCharacter::AAuraCharacter()
 	FollowCamera->SetupAttachment(CameraBoom);
 	FollowCamera->SetProjectionMode(ECameraProjectionMode::Perspective);
 	FollowCamera->SetFieldOfView(55);
+
+	
 }
 
 void AAuraCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	InitAbilityActorInfo();
-	AddCharacterAbilities();
 }
 
 void AAuraCharacter::OnRep_PlayerState()
@@ -64,7 +66,7 @@ void AAuraCharacter::Tick(float DeltaSeconds)
 		UGameplayAbility* Ability=Spec.Ability;
 		if (Ability&&!Spec.IsActive())
 		{
-			if(!Ability->IsA(UGA_Death::StaticClass()))
+			if(!Ability->IsA(UGA_Death::StaticClass())&&!Ability->IsA(UGA_LevelUp::StaticClass()))
 				GetAbilitySystemComponent()->TryActivateAbility(Spec.Handle);
 		}
 	}
@@ -81,6 +83,8 @@ void AAuraCharacter::InitAbilityActorInfo()
 
 	Cast<UAuraAttributeSet>(AttributeSet)->InitAttributes();
 
+	Cast<UAuraAttributeSet>(AttributeSet)->LevelUpInfo=LevelUpInfo;
+
 	if(AAuraPlayerController* AuraPlayerController=Cast<AAuraPlayerController>(GetController()))
 	{
 		if(AAuraHUD* AuraHUD=Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
@@ -88,5 +92,4 @@ void AAuraCharacter::InitAbilityActorInfo()
 			AuraHUD->InitOverlay(AuraPlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet,this);
 		}
 	}
-
 }

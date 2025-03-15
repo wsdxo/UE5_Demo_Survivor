@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "ShaderPrintParameters.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "Actor/EnemySpawner.h"
 #include "Blueprint/UserWidget.h"
 #include "Character/AuraCharacter.h"
@@ -66,8 +67,7 @@ void UGA_Death::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
 		AAuraEnemy* Enemy=Cast<AAuraEnemy>(Avatar);
 		int32 XPAward=Enemy->GetXPAward();
 		AAuraCharacter* AuraCharacter=Cast<AAuraCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
-		AuraCharacter->AddToXP(XPAward);
-		Avatar->Destroy();
+		AwardXPToPlayer(AuraCharacter,XPAward);
 	}
 	else if(Avatar->IsA(AAuraCharacter::StaticClass()))
 	{
@@ -82,8 +82,31 @@ void UGA_Death::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
 		}
 
 		ShowDeathUI_Implementation();
-		Avatar->Destroy();
-		
+
+		EndAbility(Handle,ActorInfo,ActivationInfo,true,false);
 	}
-	EndAbility(Handle,ActorInfo,ActivationInfo,true,false);
+
+	Avatar->Destroy();
+}
+
+void UGA_Death::AwardXPToPlayer(AAuraCharacter* TargetCharacter, int32 XPAward)
+{
+	if (!TargetCharacter || XPAward <= 0) return;
+	
+	UAbilitySystemComponent* TargetASC = TargetCharacter->GetAbilitySystemComponent();
+	if (!TargetASC) return;
+	
+	FGameplayEffectContextHandle EffectContext = TargetASC->MakeEffectContext();
+	EffectContext.AddSourceObject(GetOwningActorFromActorInfo());
+	
+	UGameplayEffect* GEXPAward = NewObject<UGameplayEffect>(GetTransientPackage(), FName(TEXT("GE_XPAward")));
+	GEXPAward->DurationPolicy = EGameplayEffectDurationType::Instant;
+	
+	FGameplayModifierInfo XPModifier;
+	XPModifier.ModifierOp = EGameplayModOp::Additive;
+	XPModifier.Attribute = UAuraAttributeSet::GetXPAttribute(); 
+	XPModifier.ModifierMagnitude = FScalableFloat(XPAward);
+	GEXPAward->Modifiers.Add(XPModifier);
+	
+	TargetASC->ApplyGameplayEffectToSelf(GEXPAward, 1.0f, EffectContext);
 }

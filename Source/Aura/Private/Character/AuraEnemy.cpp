@@ -71,7 +71,7 @@ void AAuraEnemy::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayE
 	FGameplayEffectContextHandle EffectContextHandle=TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
 
-	FGameplayEffectSpecHandle EffectSpecHandle=TargetASC->MakeOutgoingSpec(GameplayEffectClass,static_cast<float>(GetPlayerLevel()),EffectContextHandle);
+	FGameplayEffectSpecHandle EffectSpecHandle=TargetASC->MakeOutgoingSpec(GameplayEffectClass,Cast<UAuraAttributeSet>(GetAttributeSet())->GetCharacterLevel(),EffectContextHandle);
 
 	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 }

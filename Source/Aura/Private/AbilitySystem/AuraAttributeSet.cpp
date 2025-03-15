@@ -4,6 +4,8 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/Data/LevelUpInfo.h"
+#include "Character/AuraCharacter.h"
 #include "Net/UnrealNetwork.h"
 
 
@@ -28,13 +30,34 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 
 		if(NewValue<=0&&GetHealth()>0)
 		{
-			GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,TEXT("Death"));
 			if(UAbilitySystemComponent* AbilitySystemComponent=GetOwningAbilitySystemComponent())
 			{
 				FGameplayTagContainer DeathTag;
 				DeathTag.AddTag(FGameplayTag::RequestGameplayTag("Ability.Death"));
 				AbilitySystemComponent->TryActivateAbilitiesByTag(DeathTag);
 			}
+		}
+	}
+	if(Attribute==GetXPAttribute())
+	{
+		int32 NewLevel=LevelUpInfo->FindLevelForXP(NewValue);
+
+		if(NewLevel>GetLevel())
+		{
+			GetOwningAbilitySystemComponent()->ApplyModToAttribute(
+				GetLevelAttribute(),
+				EGameplayModOp::Override,
+				NewLevel
+				);
+		}
+	}
+	if(Attribute==GetLevelAttribute())
+	{
+		if(UAbilitySystemComponent* AbilitySystemComponent=GetOwningAbilitySystemComponent())
+		{
+			FGameplayTagContainer LevelUpTag;
+			LevelUpTag.AddTag(FGameplayTag::RequestGameplayTag("Ability.LevelUp"));
+			AbilitySystemComponent->TryActivateAbilitiesByTag(LevelUpTag);
 		}
 	}
 }
@@ -56,4 +79,19 @@ void UAuraAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue) 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Health,OldValue);
+}
+
+void UAuraAttributeSet::OnRep_XP(const FGameplayAttributeData& OldValue) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,XP,OldValue);
+}
+
+void UAuraAttributeSet::OnRep_Level(const FGameplayAttributeData& OldValue) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,Level,OldValue);
+}
+
+float UAuraAttributeSet::GetCharacterLevel()
+{
+	return GetLevel();
 }

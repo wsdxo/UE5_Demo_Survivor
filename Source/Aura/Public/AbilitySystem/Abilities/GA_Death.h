@@ -6,6 +6,7 @@
 #include "AbilitySystem/AuraGameplayAbility.h"
 #include "GA_Death.generated.h"
 
+class AAuraCharacter;
 /**
  * 
  */
@@ -23,6 +24,8 @@ public:
 	void ShowDeathUI();
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+	void AwardXPToPlayer(AAuraCharacter* TargetCharacter, int32 XPAward);
 
 protected:
 	UPROPERTY(EditDefaultsOnly,Category="DeathUI")

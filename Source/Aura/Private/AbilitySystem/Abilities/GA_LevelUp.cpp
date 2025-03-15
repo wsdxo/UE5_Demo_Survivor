@@ -43,7 +43,17 @@ void UGA_LevelUp::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
+	if (!HasAuthority(&ActivationInfo)) return;
 	
+	if(!CommitAbility(Handle,ActorInfo,ActivationInfo))
+	{
+		return;
+	}
+
+	AActor* Avatar=GetAvatarActorFromActorInfo();
+	if(!Avatar)return;
+
+	ShowLevelUpUI_Implementation();
 
 	
 	EndAbility(Handle,ActorInfo,ActivationInfo,true,false);

@@ -37,5 +37,5 @@ protected:
 	
 	void MaxHealthChanged(const FOnAttributeChangeData& Data)const;
 
-	void OnXPChanged(int32 NewXP)const;
+	void OnXPChanged(const FOnAttributeChangeData& Data)const;
 };
