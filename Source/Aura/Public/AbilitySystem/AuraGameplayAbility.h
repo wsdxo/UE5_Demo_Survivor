@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "AbilitySystem/Data/SkillInfoData.h"
 #include "AuraGameplayAbility.generated.h"
 
 class UAuraGameplayAbility;
@@ -29,7 +30,7 @@ struct FGameplayAbilityInfo
 	FGameplayAbilityInfo(float CD,UMaterialInstance* IconMaterial,TSubclassOf<UAuraGameplayAbility> AbilityClass);
 };
 
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class AURA_API UAuraGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
@@ -44,7 +45,16 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	int32 CurrentSkillLevel = 1;
 
-	UFUNCTION()
+	UPROPERTY(EditDefaultsOnly,Category="Skill UI")
+	TSoftObjectPtr<USkillInfoData> SkillInfoData;
+
+	UFUNCTION(BlueprintCallable)
+	USkillInfoData* GetSkillInfoData()const{return SkillInfoData.LoadSynchronous();}
+
+	UFUNCTION(BlueprintCallable)
 	virtual void UpgradeAbility();
+
+protected:
+	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 	
 };

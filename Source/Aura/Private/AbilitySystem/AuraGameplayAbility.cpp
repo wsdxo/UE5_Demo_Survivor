@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/AuraGameplayAbility.h"
 
+#include "Player/AuraPlayerController.h"
+
 
 FGameplayAbilityInfo::FGameplayAbilityInfo()
 {
@@ -32,5 +34,14 @@ FGameplayAbilityInfo UAuraGameplayAbility::GetAbilityInfo(int level)
 void UAuraGameplayAbility::UpgradeAbility()
 {
 	CurrentSkillLevel++;
-	
+	AAuraPlayerController* AuraPlayerController=Cast<AAuraPlayerController>(GetWorld()->GetFirstPlayerController());
+	AuraPlayerController->Ability2Level[this]++;
+}
+
+void UAuraGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
+{
+	Super::OnGiveAbility(ActorInfo, Spec);
+	AAuraPlayerController* AuraPlayerController=Cast<AAuraPlayerController>(GetWorld()->GetFirstPlayerController());
+	TPair<UAuraGameplayAbility*,int32>AbilityLevel(Spec.Ability,1);
+	AuraPlayerController->Ability2Level.Add(AbilityLevel);
 }

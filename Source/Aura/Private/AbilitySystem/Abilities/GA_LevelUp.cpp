@@ -5,6 +5,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Player/AuraPlayerController.h"
+#include "UI/Widget/UpgradeSelectionWidget.h"
 
 
 UGA_LevelUp::UGA_LevelUp()
@@ -25,8 +26,13 @@ void UGA_LevelUp::ShowLevelUpUI_Implementation()
 			}
 			if(IsValid(LevelUpUIInstance))
 			{
+				
 				LevelUpUIInstance->AddToViewport(200);
-
+				if(UUpgradeSelectionWidget* Widget=Cast<UUpgradeSelectionWidget>(LevelUpUIClass))
+				{
+					TPair<TArray<UAuraGameplayAbility*>,TArray<int32>>Pair=AuraPlayerController->GetSkillUpgradeInfo();
+					Widget->PopulateOptions(Pair.Key,Pair.Value);
+				}
 				FInputModeUIOnly InputMode;
 				InputMode.SetWidgetToFocus(LevelUpUIInstance->TakeWidget());
 				InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
