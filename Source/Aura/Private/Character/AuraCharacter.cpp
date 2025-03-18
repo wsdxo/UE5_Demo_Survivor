@@ -48,6 +48,10 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	InitAbilityActorInfo();
+	if(AAuraPlayerState* AuraPlayerState=GetPlayerState<AAuraPlayerState>())
+	{
+		AuraPlayerState->AddStateAbilities();
+	}
 }
 
 void AAuraCharacter::OnRep_PlayerState()
@@ -57,6 +61,26 @@ void AAuraCharacter::OnRep_PlayerState()
 }
 
 
+TPair<TArray<UAuraGameplayAbility*>, TArray<int32>> AAuraCharacter::GetSkillUpgradeInfo()
+{
+	TArray<UAuraGameplayAbility*> Abilities;
+	TArray<int32>Levels;
+	for(int32 i=0;i<3;i++)
+	{
+		int32 Index = FMath::RandRange(0, AbilitiesToGet.Num() - 1);
+		for(UAuraGameplayAbility* Ability:OwnedAbilities)
+		{
+			if(Ability->GetClass()==AbilitiesToGet[Index])
+			{
+				Abilities.Add(Ability);
+				Levels.Add(Ability->CurrentSkillLevel);
+				break;
+			}
+		}
+	}
+	TPair<TArray<UAuraGameplayAbility*>, TArray<int32>> Result = {Abilities, Levels};
+	return Result;
+}
 
 void AAuraCharacter::Tick(float DeltaSeconds)
 {

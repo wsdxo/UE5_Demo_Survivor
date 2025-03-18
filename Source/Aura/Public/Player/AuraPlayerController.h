@@ -23,12 +23,6 @@ public:
 
 	AAuraPlayerController();
 
-	UPROPERTY(EditAnywhere,BlueprintType,Category="Ability Infos")
-	TMap<UAuraGameplayAbility*,int32>Ability2Level;
-	UPROPERTY(EditAnywhere,BlueprintType,Category="Ability Infos")
-	TArray<TSubclassOf<UAuraGameplayAbility>>AbilitiesToGet;
-	
-	TPair<TArray<UAuraGameplayAbility*>,TArray<int32>>GetSkillUpgradeInfo();
 
 protected:
 	virtual void BeginPlay() override;

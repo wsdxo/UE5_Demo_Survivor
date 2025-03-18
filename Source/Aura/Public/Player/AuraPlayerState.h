@@ -23,6 +23,8 @@ public:
 
 	UAttributeSet* GetAttributeSet() const {return AttributeSet;}
 
+	void AddStateAbilities();
+
 protected:
 	UPROPERTY()
 	UAbilitySystemComponent* AbilitySystemComponent;
@@ -32,5 +34,5 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	void AddStateAbilities();
+
 };

@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "SkillInfoWidget.generated.h"
 
+class UImage;
+class UTextBlock;
 class UAuraGameplayAbility;
 class UButton;
 class USkillInfoData;
@@ -23,13 +25,13 @@ public:
 	void UpdateDisplay(UAuraGameplayAbility* NewAbility, int32 NewLevel);
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	class UTextBlock* SkillNameText;
+	UTextBlock* SkillNameText;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	class UImage* SkillIconImage;
+	UImage* SkillIconImage;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	class UTextBlock* LevelDescriptionText;
+	UTextBlock* LevelDescriptionText;
 	
 
 	UPROPERTY(EditDefaultsOnly)

@@ -15,23 +15,6 @@ AAuraPlayerController::AAuraPlayerController()
 	bReplicates=true;
 }
 
-TPair<TArray<UAuraGameplayAbility*>, TArray<int32>> AAuraPlayerController::GetSkillUpgradeInfo()
-{
-	int32 Index;
-
-	TPair<TArray<UAuraGameplayAbility*>, TArray<int32>> Result;
-	TArray<UAuraGameplayAbility*> Abilities;
-	TArray<int32>Levels;
-	for(int32 i=0;i<3;i++)
-	{
-		Index=FMath::RandRange(0,Ability2Level.Num()-1);
-		UAuraGameplayAbility* Ability=AbilitiesToGet[Index].GetDefaultObject();
-		Abilities.Add(Ability);
-		Levels.Add(Ability2Level[Ability]);
-	}
-	Result={Abilities,Levels};
-	return Result;
-}
 
 void AAuraPlayerController::BeginPlay()
 {

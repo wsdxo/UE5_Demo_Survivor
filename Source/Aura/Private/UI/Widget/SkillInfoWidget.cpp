@@ -11,11 +11,10 @@
 
 void USkillInfoWidget::UpdateDisplay(UAuraGameplayAbility* NewAbility, int32 NewLevel)
 {
-	if(!NewAbility)
+	if(!IsValid(NewAbility))
 	{
 		return;
 	}
-
 	AuraGameplayAbility=NewAbility;
 	
 	SkillNameText->SetText(NewAbility->SkillInfoData->SkillName);

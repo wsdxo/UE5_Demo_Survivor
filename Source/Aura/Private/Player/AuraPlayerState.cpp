@@ -28,8 +28,7 @@ UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 void AAuraPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
-
-	AddStateAbilities();
+	
 }
 
 void AAuraPlayerState::AddStateAbilities()

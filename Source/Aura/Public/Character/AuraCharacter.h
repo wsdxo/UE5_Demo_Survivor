@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "AuraCharacter.generated.h"
 
+class UAuraGameplayAbility;
 /**
  * 
  */
@@ -22,6 +23,13 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void OnRep_PlayerState() override;
+
+	UPROPERTY(EditAnywhere,BlueprintType,Category="Ability Infos")
+	TArray<UAuraGameplayAbility*>OwnedAbilities;
+	UPROPERTY(EditAnywhere,BlueprintType,Category="Ability Infos")
+	TArray<TSubclassOf<UAuraGameplayAbility>>AbilitiesToGet;
+	
+	TPair<TArray<UAuraGameplayAbility*>,TArray<int32>>GetSkillUpgradeInfo();
 
 
 protected:

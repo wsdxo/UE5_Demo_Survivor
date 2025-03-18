@@ -4,6 +4,7 @@
 #include "AbilitySystem/Abilities/GA_LevelUp.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Character/AuraCharacter.h"
 #include "Player/AuraPlayerController.h"
 #include "UI/Widget/UpgradeSelectionWidget.h"
 
@@ -28,10 +29,14 @@ void UGA_LevelUp::ShowLevelUpUI_Implementation()
 			{
 				
 				LevelUpUIInstance->AddToViewport(200);
-				if(UUpgradeSelectionWidget* Widget=Cast<UUpgradeSelectionWidget>(LevelUpUIClass))
+				if(UUpgradeSelectionWidget* Widget=Cast<UUpgradeSelectionWidget>(LevelUpUIInstance))
 				{
-					TPair<TArray<UAuraGameplayAbility*>,TArray<int32>>Pair=AuraPlayerController->GetSkillUpgradeInfo();
-					Widget->PopulateOptions(Pair.Key,Pair.Value);
+					if(AAuraCharacter* AuraCharacter=Cast<AAuraCharacter>(GetAvatarActorFromActorInfo()))
+					{
+						TPair<TArray<UAuraGameplayAbility*>,TArray<int32>>Pair=AuraCharacter->GetSkillUpgradeInfo();
+						Widget->PopulateOptions(Pair.Key,Pair.Value);
+					}
+
 				}
 				FInputModeUIOnly InputMode;
 				InputMode.SetWidgetToFocus(LevelUpUIInstance->TakeWidget());
