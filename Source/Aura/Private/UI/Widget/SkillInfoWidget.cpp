@@ -16,20 +16,22 @@ void USkillInfoWidget::UpdateDisplay(UAuraGameplayAbility* NewAbility, int32 New
 		return;
 	}
 	AuraGameplayAbility=NewAbility;
-	
-	SkillNameText->SetText(NewAbility->SkillInfoData->SkillName);
-
-	if(SkillIconImage)
+	if(USkillInfoData* SkillInfoData=NewAbility->GetSkillInfoData())
 	{
-		SkillIconImage->SetBrushFromTexture(NewAbility->SkillInfoData->SkillIcon.LoadSynchronous());
+		SkillNameText->SetText(SkillInfoData->SkillName);
+
+		if(SkillIconImage)
+		{
+			SkillIconImage->SetBrushFromTexture(SkillInfoData->SkillIcon.LoadSynchronous());
+		}
+
+		FText Description =FText::GetEmpty();
+
+		if(FText* FoundDescription =SkillInfoData->LevelDescriptions.Find(NewLevel))
+		{
+			Description=*FoundDescription;
+		}
+
+		LevelDescriptionText->SetText(Description);
 	}
-
-	FText Description =FText::GetEmpty();
-
-	if(FText* FoundDescription =NewAbility->SkillInfoData->LevelDescriptions.Find(NewLevel))
-	{
-		Description=*FoundDescription;
-	}
-
-	LevelDescriptionText->SetText(Description);
 }

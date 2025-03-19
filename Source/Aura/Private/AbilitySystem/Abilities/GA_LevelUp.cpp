@@ -21,13 +21,8 @@ void UGA_LevelUp::ShowLevelUpUI_Implementation()
 	{
 		if(AAuraPlayerController* AuraPlayerController=Cast<AAuraPlayerController>(GetAvatarActorFromActorInfo()->GetInstigatorController()))
 		{
-			if(!LevelUpUIInstance)
+			if(UUserWidget* LevelUpUIInstance=CreateWidget<UUserWidget>(AuraPlayerController,LevelUpUIClass,"LevelUpUI"))
 			{
-				LevelUpUIInstance=CreateWidget<UUserWidget>(AuraPlayerController,LevelUpUIClass,"LevelUpUI");
-			}
-			if(IsValid(LevelUpUIInstance))
-			{
-				
 				LevelUpUIInstance->AddToViewport(200);
 				if(UUpgradeSelectionWidget* Widget=Cast<UUpgradeSelectionWidget>(LevelUpUIInstance))
 				{

@@ -27,8 +27,6 @@ protected:
 	TSubclassOf<UGameplayEffect> DurationGameplayEffectClass;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Apply Effect")
 	TSubclassOf<UGameplayEffect> InfiniteGameplayEffectClass;
-	UPROPERTY(EditAnywhere,Category="ApplyEffect")
-	float Level;
 
 	UFUNCTION(BlueprintCallable)
 	void ApplyEffectToTarget(AActor*TargetActor,TSubclassOf<UGameplayEffect>GameplayEffectClass);
@@ -40,9 +38,15 @@ public:
 	UFUNCTION()
 	void SetLevel(float InLevel);
 
+	UFUNCTION()
+	float GetEffectActorLevel()const{return Level;}
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent>Mesh;
+
+	UPROPERTY()
+	float Level=1;
 
 	
 	

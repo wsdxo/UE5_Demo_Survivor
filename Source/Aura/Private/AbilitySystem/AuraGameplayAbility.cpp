@@ -36,6 +36,7 @@ FGameplayAbilityInfo UAuraGameplayAbility::GetAbilityInfo(int level)
 void UAuraGameplayAbility::UpgradeAbility()
 {
 	CurrentSkillLevel++;
+	GetAbilityLevel();
 }
 
 void UAuraGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)

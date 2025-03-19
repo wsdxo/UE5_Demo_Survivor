@@ -68,13 +68,21 @@ TPair<TArray<UAuraGameplayAbility*>, TArray<int32>> AAuraCharacter::GetSkillUpgr
 	for(int32 i=0;i<3;i++)
 	{
 		int32 Index = FMath::RandRange(0, AbilitiesToGet.Num() - 1);
+		bool bFound=false;
 		for(UAuraGameplayAbility* Ability:OwnedAbilities)
 		{
 			if(Ability->GetClass()==AbilitiesToGet[Index])
 			{
 				Abilities.Add(Ability);
 				Levels.Add(Ability->CurrentSkillLevel);
+				bFound=true;
 				break;
+			}
+			if(!bFound)
+			{
+				GetAbilitySystemComponent()->GiveAbility(FGameplayAbilitySpec(AbilitiesToGet[Index]));
+				Abilities.Add(OwnedAbilities[OwnedAbilities.Num()-1]);
+				Levels.Add(1);
 			}
 		}
 	}

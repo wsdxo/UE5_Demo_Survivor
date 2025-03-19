@@ -25,8 +25,4 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly,Category="LevelUpUI")
 	TSubclassOf<UUserWidget>LevelUpUIClass;
-
-	TObjectPtr<UUserWidget>LevelUpUIInstance;
-	
-	
 };

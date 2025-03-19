@@ -35,7 +35,6 @@ void UGA_Explosion::SpawnExplosion() const
 		if(IsValid(Explosion))
 		{
 			Explosion->SetLevel(CurrentSkillLevel);
-			Explosion->SetLifeSpan(0.1f);
 		}
 	}
 }
