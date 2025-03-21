@@ -94,15 +94,19 @@ TPair<TArray<UAuraGameplayAbility*>, TArray<int32>> AAuraCharacter::GetSkillUpgr
 void AAuraCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	for (const FGameplayAbilitySpec& Spec:GetAbilitySystemComponent()->GetActivatableAbilities())
-	{
-		UGameplayAbility* Ability=Spec.Ability;
-		if (Ability&&!Spec.IsActive())
-		{
-			if(!Ability->IsA(UGA_Death::StaticClass())&&!Ability->IsA(UGA_LevelUp::StaticClass()))
-				GetAbilitySystemComponent()->TryActivateAbility(Spec.Handle);
-		}
-	}
+	
+	// for (const FGameplayAbilitySpec& Spec:GetAbilitySystemComponent()->GetActivatableAbilities())
+	// {
+	// 	UGameplayAbility* Ability=Spec.Ability;
+	// 	if (Ability&&!Spec.IsActive())
+	// 	{
+	// 		if(!Ability->IsA(UGA_Death::StaticClass())&&!Ability->IsA(UGA_LevelUp::StaticClass()))
+	// 			GetAbilitySystemComponent()->TryActivateAbility(Spec.Handle);
+	// 	}
+	// }
+	FGameplayTagContainer ActiveTagContainer;
+	ActiveTagContainer.AddTag(FGameplayTag::RequestGameplayTag("Ability.Active"));
+	GetAbilitySystemComponent()->TryActivateAbilitiesByTag(ActiveTagContainer);
 }
 
 void AAuraCharacter::InitAbilityActorInfo()

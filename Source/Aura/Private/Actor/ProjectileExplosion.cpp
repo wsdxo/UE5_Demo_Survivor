@@ -19,8 +19,8 @@ void AProjectileExplosion::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Sphere->OnComponentBeginOverlap.AddDynamic(this,&AProjectileExplosion::OnSphereBeginOverlap);
 	Sphere->InitSphereRadius(RadiusOfLevels[GetEffectActorLevel()]);
+	Sphere->OnComponentBeginOverlap.AddDynamic(this,&AProjectileExplosion::OnSphereBeginOverlap);
 
 	SetLifeSpan(0.2f);
 }

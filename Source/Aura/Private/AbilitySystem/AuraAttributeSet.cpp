@@ -28,6 +28,16 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 	{
 		NewValue=FMath::Clamp(NewValue,0,GetMaxHealth());
 
+		if(NewValue<=GetMaxHealth()*0.4f&&GetHealth()>=GetMaxHealth()*0.4f)
+		{
+			if(UAbilitySystemComponent* AbilitySystemComponent=GetOwningAbilitySystemComponent())
+			{
+				FGameplayTagContainer HealingTag;
+				HealingTag.AddTag(FGameplayTag::RequestGameplayTag("Ability.Passive.Healing"));
+				AbilitySystemComponent->TryActivateAbilitiesByTag(HealingTag);
+			}
+		}
+
 		if(NewValue<=0&&GetHealth()>0)
 		{
 			if(UAbilitySystemComponent* AbilitySystemComponent=GetOwningAbilitySystemComponent())
