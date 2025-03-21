@@ -78,12 +78,13 @@ TPair<TArray<UAuraGameplayAbility*>, TArray<int32>> AAuraCharacter::GetSkillUpgr
 				bFound=true;
 				break;
 			}
-			if(!bFound)
-			{
-				GetAbilitySystemComponent()->GiveAbility(FGameplayAbilitySpec(AbilitiesToGet[Index]));
-				Abilities.Add(OwnedAbilities[OwnedAbilities.Num()-1]);
-				Levels.Add(1);
-			}
+		}
+		if(!bFound)
+		{
+			UAuraGameplayAbility* TempAbility=NewObject<UAuraGameplayAbility>(this,AbilitiesToGet[Index]);
+
+			Abilities.Add(TempAbility);
+			Levels.Add(1);
 		}
 	}
 	TPair<TArray<UAuraGameplayAbility*>, TArray<int32>> Result = {Abilities, Levels};

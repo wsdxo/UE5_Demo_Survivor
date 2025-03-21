@@ -22,7 +22,7 @@ void AProjectileExplosion::BeginPlay()
 	Sphere->OnComponentBeginOverlap.AddDynamic(this,&AProjectileExplosion::OnSphereBeginOverlap);
 	Sphere->InitSphereRadius(RadiusOfLevels[GetEffectActorLevel()]);
 
-	SetLifeSpan(0.1f);
+	SetLifeSpan(0.2f);
 }
 
 void AProjectileExplosion::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

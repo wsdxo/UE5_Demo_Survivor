@@ -7,6 +7,7 @@
 #include "AbilitySystem/Data/SkillInfoData.h"
 #include "AuraGameplayAbility.generated.h"
 
+class UAuraAbilitySystemComponent;
 class UAuraGameplayAbility;
 /**
  * 
@@ -54,8 +55,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void UpgradeAbility();
 
+	UPROPERTY()
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent=nullptr;
+
 protected:
 	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 
-	
+	virtual void OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 };

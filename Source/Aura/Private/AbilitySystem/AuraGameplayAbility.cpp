@@ -35,8 +35,25 @@ FGameplayAbilityInfo UAuraGameplayAbility::GetAbilityInfo(int level)
 
 void UAuraGameplayAbility::UpgradeAbility()
 {
-	CurrentSkillLevel++;
-	GetAbilityLevel();
+	if(AbilitySystemComponent)
+	{
+		CurrentSkillLevel++;
+
+		if(FGameplayAbilitySpec* AbilitySpec=AbilitySystemComponent->FindAbilitySpecFromClass(GetClass()))
+		{
+			AbilitySpec->Level=CurrentSkillLevel;
+			AbilitySystemComponent->MarkAbilitySpecDirty(*AbilitySpec);
+		}
+	}
+	else
+	{
+		if (AAuraCharacter* AuraCharacter=Cast<AAuraCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn()))
+		{
+			FGameplayAbilitySpec AbilitySpec(GetClass());
+			AuraCharacter->GetAbilitySystemComponent()->GiveAbility(AbilitySpec);
+		}
+	}
+	
 }
 
 void UAuraGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
@@ -49,6 +66,16 @@ void UAuraGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorI
 		{
 			AuraCharacter->OwnedAbilities.Add(this);
 		}
+	}
+}
+
+void UAuraGameplayAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
+{
+	Super::OnAvatarSet(ActorInfo, Spec);
+	
+	if(ActorInfo)
+	{
+		AbilitySystemComponent=ActorInfo->AbilitySystemComponent.Get();
 	}
 }
 
