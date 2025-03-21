@@ -28,7 +28,9 @@ AAuraEnemy::AAuraEnemy()
 	
 	AttributeSet=CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 
-	
+	HomingAnchor=CreateDefaultSubobject<USceneComponent>("HomingAnchor");
+	HomingAnchor->SetupAttachment(GetRootComponent());
+	HomingAnchor->SetWorldLocation(GetActorLocation());
 }
 
 void AAuraEnemy::BeginPlay()

@@ -54,6 +54,9 @@ private:
 public:
 	virtual void AddCharacterAbilities() override;
 
+	UPROPERTY()
+	TObjectPtr<USceneComponent> HomingAnchor;
+
 	UFUNCTION(BlueprintCallable)
 	int32 GetXPAward() const { return XPAward; }
 	

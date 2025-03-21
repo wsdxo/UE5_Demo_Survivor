@@ -32,6 +32,7 @@ public:
 	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	
+	
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxHealth)
 	UPROPERTY(VisibleAnywhere,ReplicatedUsing=OnRep_MaxHealth,BlueprintReadWrite)
 	FGameplayAttributeData MaxHealth;
