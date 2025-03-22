@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Actor/EffectActor.h"
-#include "ProjectileTrack.generated.h"
+#include "FightBack.generated.h"
 
 class UProjectileMovementComponent;
 class USphereComponent;
@@ -12,21 +12,14 @@ class USphereComponent;
  * 
  */
 UCLASS()
-class AURA_API AProjectileTrack : public AEffectActor
+class AURA_API AFightBack : public AEffectActor
 {
 	GENERATED_BODY()
-
+	
+	
 public:
-	AProjectileTrack();
-
-	UFUNCTION()
-	void SetHomingTarget(AActor* Target);
-
+	AFightBack();
 protected:
-	UPROPERTY()
-	TObjectPtr<AActor> HomingTarget;
-
-	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void BeginPlay() override;
 private:
@@ -35,9 +28,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
-	
-	void FindNearestEnemy();
 
 	UFUNCTION()
 	void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	
 };

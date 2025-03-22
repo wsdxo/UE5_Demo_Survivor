@@ -34,6 +34,8 @@ public:
 
 protected:
 	virtual void Tick(float DeltaSeconds) override;
+
+	virtual void Destroyed() override;
 	
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))

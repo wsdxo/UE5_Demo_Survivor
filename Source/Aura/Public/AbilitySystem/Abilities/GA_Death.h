@@ -33,5 +33,4 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UUserWidget>DeathUIInstance;
-	
 };

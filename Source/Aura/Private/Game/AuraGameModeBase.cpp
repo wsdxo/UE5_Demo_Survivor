@@ -19,27 +19,19 @@ AAuraGameModeBase::AAuraGameModeBase()
 void AAuraGameModeBase::ReStartGame()
 {
 
-	AAuraPlayerController* PlayerController=Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(this,0));
-
-	if(!PlayerController)return;
-	
-	if (APawn* OldPawn = PlayerController->GetPawn())
+	if(AAuraPlayerController* PlayerController=Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(this,0)))
 	{
-		OldPawn->UnPossessed();
-		OldPawn->Destroy();
+		if (APawn* OldPawn = PlayerController->GetPawn())
+		{
+			OldPawn->UnPossessed();
+			OldPawn->Destroy();
+			GetWorld()->DestroyActor(OldPawn);
+		}
+		if(AActor* PlayerStart = FindPlayerStart(PlayerController))
+		{
+			RestartPlayerAtPlayerStart(PlayerController,FindPlayerStart(PlayerController));
+		}
 	}
-	AActor* PlayerStart = FindPlayerStart(PlayerController);
-	RestartPlayerAtPlayerStart(PlayerController,FindPlayerStart(PlayerController));
-
-	if (AAuraCharacter* NewCharacter = Cast<AAuraCharacter>(PlayerController->GetPawn()))
-	{
-		PlayerController->Possess(NewCharacter);
-		
-		PlayerController->SetInputMode(FInputModeGameOnly());
-		PlayerController->bShowMouseCursor=false;
-		
-	}
-	
 	if(AAuraGameStateBase* AuraGameState=GetWorld()->GetGameState<AAuraGameStateBase>())
 	{
 		TArray<AAuraEnemy*> LocalActiveEnemies =  AuraGameState->ActiveEnemies;

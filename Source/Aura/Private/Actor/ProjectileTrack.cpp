@@ -17,7 +17,7 @@ AProjectileTrack::AProjectileTrack()
 
 	ProjectileMovementComponent=CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComponent");
 	ProjectileMovementComponent->bIsHomingProjectile=true;
-	ProjectileMovementComponent->HomingAccelerationMagnitude=2000.f;
+	ProjectileMovementComponent->HomingAccelerationMagnitude=5000.f;
 	ProjectileMovementComponent->InitialSpeed=500.f;
 }
 
@@ -51,17 +51,19 @@ void AProjectileTrack::BeginPlay()
 {
 	Super::BeginPlay();
 	FindNearestEnemy();
+
+	Sphere->OnComponentBeginOverlap.AddDynamic(this,&AProjectileTrack::OnSphereBeginOverlap);
+	
 	SetLifeSpan(10.f);
 }
 
 void AProjectileTrack::FindNearestEnemy()
 {
-	AActor* NearestEnemy = nullptr;
-	float NearestDistance = FLT_MAX;
-	FVector ProjectileLocation = GetActorLocation();
-
-	if (AAuraGameStateBase* AuraGameState=Cast<AAuraGameStateBase>(GetWorld()->GetGameState()))
+	if (AAuraGameStateBase* AuraGameState=GetWorld()->GetGameState<AAuraGameStateBase>())
 	{
+		AActor* NearestEnemy = nullptr;
+		float NearestDistance = FLT_MAX;
+		FVector ProjectileLocation = GetActorLocation();
 		for(AAuraEnemy* Enemy:AuraGameState->ActiveEnemies)
 		{
 			float Distance=FVector::Distance(ProjectileLocation,Enemy->GetActorLocation());
@@ -71,15 +73,23 @@ void AProjectileTrack::FindNearestEnemy()
 				NearestEnemy=Enemy;
 			}
 		}
-		
+		if(NearestEnemy)
+		{
+			SetHomingTarget(NearestEnemy);
+		}
+		else
+		{
+			Destroy();
+		}
 	}
+}
 
-	if(NearestEnemy)
+void AProjectileTrack::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(AAuraEnemy* Enemy=Cast<AAuraEnemy>(OtherActor))
 	{
-		SetHomingTarget(NearestEnemy);
-	}
-	else
-	{
+		ApplyEffectToTarget(Enemy,InstantGameplayEffectClass);
 		Destroy();
 	}
 }

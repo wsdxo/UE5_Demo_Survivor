@@ -86,7 +86,7 @@ void UGA_Death::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
 		EndAbility(Handle,ActorInfo,ActivationInfo,true,false);
 	}
 
-	Avatar->Destroy();
+	Avatar->SetLifeSpan(0.2f);
 }
 
 void UGA_Death::AwardXPToPlayer(AAuraCharacter* TargetCharacter, int32 XPAward)
@@ -110,3 +110,5 @@ void UGA_Death::AwardXPToPlayer(AAuraCharacter* TargetCharacter, int32 XPAward)
 	
 	TargetASC->ApplyGameplayEffectToSelf(GEXPAward, 1.0f, EffectContext);
 }
+
+

@@ -29,6 +29,8 @@ protected:
 
 	virtual void SetupInputComponent() override;
 
+	virtual void BeginPlayingState() override;
+
 private:
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputMappingContext>AuraContext;

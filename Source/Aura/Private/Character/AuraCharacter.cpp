@@ -51,6 +51,13 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 	if(AAuraPlayerState* AuraPlayerState=GetPlayerState<AAuraPlayerState>())
 	{
 		AuraPlayerState->AddStateAbilities();
+		if(AAuraPlayerController* AuraPlayerController=Cast<AAuraPlayerController>(GetController()))
+		{
+			if(AAuraHUD* AuraHUD=Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
+			{
+				AuraHUD->InitOverlay(AuraPlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet,this);
+			}
+		}
 	}
 }
 
@@ -109,6 +116,15 @@ void AAuraCharacter::Tick(float DeltaSeconds)
 	GetAbilitySystemComponent()->TryActivateAbilitiesByTag(ActiveTagContainer);
 }
 
+void AAuraCharacter::Destroyed()
+{
+	Super::Destroyed();
+
+	GetAbilitySystemComponent()->CancelAbilities();
+	GetAbilitySystemComponent()->ClearAllAbilities();
+	
+}
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	AAuraPlayerState* AuraPlayerState=GetPlayerState<AAuraPlayerState>();
@@ -121,12 +137,5 @@ void AAuraCharacter::InitAbilityActorInfo()
 	Cast<UAuraAttributeSet>(AttributeSet)->InitAttributes();
 
 	Cast<UAuraAttributeSet>(AttributeSet)->LevelUpInfo=LevelUpInfo;
-
-	if(AAuraPlayerController* AuraPlayerController=Cast<AAuraPlayerController>(GetController()))
-	{
-		if(AAuraHUD* AuraHUD=Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
-		{
-			AuraHUD->InitOverlay(AuraPlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet,this);
-		}
-	}
+	
 }

@@ -7,7 +7,7 @@
 #include "InputMappingContext.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-
+#include "Character/AuraCharacter.h"
 
 
 AAuraPlayerController::AAuraPlayerController()
@@ -42,6 +42,14 @@ void AAuraPlayerController::SetupInputComponent()
 	UEnhancedInputComponent* EnhancedInputComponent=CastChecked<UEnhancedInputComponent>(InputComponent);
 
 	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
+}
+
+void AAuraPlayerController::BeginPlayingState()
+{
+	Super::BeginPlayingState();
+
+	SetInputMode(FInputModeGameOnly());
+	bShowMouseCursor=false;
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)

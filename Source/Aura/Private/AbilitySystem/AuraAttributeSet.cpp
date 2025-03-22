@@ -18,6 +18,8 @@ void UAuraAttributeSet::InitAttributes()
 {
 	InitMaxHealth(100);
 	InitHealth(100);
+	InitXP(1);
+	InitLevel(1);
 }
 
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -45,6 +47,16 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 				FGameplayTagContainer DeathTag;
 				DeathTag.AddTag(FGameplayTag::RequestGameplayTag("Ability.Death"));
 				AbilitySystemComponent->TryActivateAbilitiesByTag(DeathTag);
+			}
+		}
+
+		if(NewValue<GetHealth())
+		{
+			if(UAbilitySystemComponent* AbilitySystemComponent=GetOwningAbilitySystemComponent())
+			{
+				FGameplayTagContainer FightBackTag;
+				FightBackTag.AddTag(FGameplayTag::RequestGameplayTag("Ability.Passive.FightBack"));
+				AbilitySystemComponent->TryActivateAbilitiesByTag(FightBackTag);
 			}
 		}
 	}
