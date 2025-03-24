@@ -27,7 +27,8 @@ AAuraEnemy::AAuraEnemy()
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 	
 	AttributeSet=CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
-
+	
+	
 	HomingAnchor=CreateDefaultSubobject<USceneComponent>("HomingAnchor");
 	HomingAnchor->SetupAttachment(GetRootComponent());
 	HomingAnchor->SetWorldLocation(GetActorLocation());
@@ -47,6 +48,8 @@ void AAuraEnemy::BeginPlay()
 	PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 
+	//Cast<UAuraAttributeSet>(GetAttributeSet())->InitAttributes(InitialHealth,InitialHealth);
+	
 	AddCharacterAbilities();
 	
 }
@@ -73,7 +76,7 @@ void AAuraEnemy::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayE
 	FGameplayEffectContextHandle EffectContextHandle=TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
 
-	FGameplayEffectSpecHandle EffectSpecHandle=TargetASC->MakeOutgoingSpec(GameplayEffectClass,Cast<UAuraAttributeSet>(GetAttributeSet())->GetCharacterLevel(),EffectContextHandle);
+	FGameplayEffectSpecHandle EffectSpecHandle=TargetASC->MakeOutgoingSpec(GameplayEffectClass,1,EffectContextHandle);
 
 	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 }
@@ -84,7 +87,16 @@ void AAuraEnemy::OnCollisionBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 {
 	if(OtherActor&&OtherActor->IsA(AAuraCharacter::StaticClass()))
 	{
-		ApplyEffectToTarget(OtherActor,InstantGameplayEffect);
+		switch (ApplyEffectType)
+		{
+		case EGameplayEffectType::Instant:
+			ApplyEffectToTarget(OtherActor,InstantGameplayEffect);
+			break;
+		case EGameplayEffectType::Duration:
+			ApplyEffectToTarget(OtherActor,DurationGameplayEffect);
+			break;
+		}
+
 		//Destroy();
 	}
 }

@@ -30,16 +30,22 @@ public:
 
 	void InitAttributes();
 	
+	void InitAttributes(float InitialMaxHealth,float InitialHealth);
+	
+	
+	void SetAttributes(float InitialMaxHealth,float InitialHealth);
+	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	
 	
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxHealth)
+
 	UPROPERTY(VisibleAnywhere,ReplicatedUsing=OnRep_MaxHealth,BlueprintReadWrite)
 	FGameplayAttributeData MaxHealth;
-
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Health)
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxHealth)
+	
 	UPROPERTY(VisibleAnywhere,ReplicatedUsing=OnRep_Health,BlueprintReadWrite)
 	FGameplayAttributeData Health;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Health)
 
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Attack)
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
@@ -49,14 +55,15 @@ public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
 	FGameplayAttributeData Defense;
 
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,XP)
+
 	UPROPERTY(VisibleAnywhere,ReplicatedUsing=OnRep_XP,BlueprintReadWrite)
 	FGameplayAttributeData XP;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,XP)
 	
-
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Level)
+	
 	UPROPERTY(VisibleAnywhere,ReplicatedUsing=OnRep_Level,BlueprintReadWrite)
 	FGameplayAttributeData Level;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Level)
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<ULevelUpInfo>LevelUpInfo;

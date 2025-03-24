@@ -22,6 +22,21 @@ void UAuraAttributeSet::InitAttributes()
 	InitLevel(1);
 }
 
+void UAuraAttributeSet::InitAttributes(float InitialMaxHealth, float InitialHealth)
+{
+	InitMaxHealth(InitialMaxHealth);
+	InitHealth(InitialHealth);
+	InitXP(1);
+	InitLevel(1);
+}
+
+void UAuraAttributeSet::SetAttributes(float InitialMaxHealth, float InitialHealth)
+{
+	SetMaxHealth(InitialMaxHealth);
+	SetHealth(InitialHealth);
+}
+
+
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);

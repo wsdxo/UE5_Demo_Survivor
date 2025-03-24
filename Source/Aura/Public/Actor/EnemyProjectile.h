@@ -3,42 +3,35 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EffectActor.h"
-#include "GameFramework/Actor.h"
-#include "ProjectileFireBall.generated.h"
+#include "Actor/EffectActor.h"
+#include "EnemyProjectile.generated.h"
 
 class UProjectileMovementComponent;
 class USphereComponent;
-
+/**
+ * 
+ */
 UCLASS()
-class AURA_API AProjectileFireBall : public AEffectActor
+class AURA_API AEnemyProjectile : public AEffectActor
 {
 	GENERATED_BODY()
+
+public:
+	AEnemyProjectile();
 	
-public:	
-
-	AProjectileFireBall();
-
 protected:
 
 	virtual void BeginPlay() override;
 
-
-	virtual void Tick(float DeltaTime) override;
-
+	virtual void Tick(float DeltaSeconds) override;
 	
-
-
-
 private:
-	
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USphereComponent> Sphere;
+	TObjectPtr<USphereComponent>Sphere;
 
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+	TObjectPtr<UProjectileMovementComponent>ProjectileMovementComponent;
 
 	UFUNCTION()
 	void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-	
 };

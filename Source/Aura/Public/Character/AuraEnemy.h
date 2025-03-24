@@ -11,6 +11,14 @@ class UGameplayEffect;
 /**
  * 
  */
+
+UENUM(BlueprintType)
+enum class EGameplayEffectType:uint8
+{
+	Instant,
+	Duration,
+};
+
 UCLASS()
 class AURA_API AAuraEnemy : public AAuraCharacterBase
 {
@@ -27,6 +35,12 @@ protected:
 	UFUNCTION(BlueprintCallable)
 
 	void ApplyEffectToTarget(AActor* TargetActor,TSubclassOf<UGameplayEffect> GameplayEffectClass);
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="Apply Effect")
+	EGameplayEffectType ApplyEffectType;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="Apply Effect")
+	TSubclassOf<UGameplayEffect> DurationGameplayEffect;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Apply Effect")
 	TSubclassOf<UGameplayEffect> InstantGameplayEffect;
@@ -39,6 +53,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly,Category="XP Award")
 	int32 XPAward=50;
 
+	APawn* PlayerPawn;
+
 
 private:
 	UFUNCTION()
@@ -46,14 +62,12 @@ private:
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
 		bool bFromSweep, const FHitResult& SweepResult);
 
-	APawn* PlayerPawn;
-
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AAIController>EnemyControllerClass;
 
 public:
 	virtual void AddCharacterAbilities() override;
-
+	
 	UPROPERTY()
 	TObjectPtr<USceneComponent> HomingAnchor;
 
