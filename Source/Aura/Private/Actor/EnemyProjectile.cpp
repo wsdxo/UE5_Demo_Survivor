@@ -5,12 +5,18 @@
 
 #include "Character/AuraCharacter.h"
 #include "Components/SphereComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 
 AEnemyProjectile::AEnemyProjectile()
 {
 	Sphere=CreateDefaultSubobject<USphereComponent>("Sphere");
 	Sphere->SetupAttachment(GetRootComponent());
+
+	ProjectileMovementComponent=CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComponent");
+	ProjectileMovementComponent->InitialSpeed=1500;
+	ProjectileMovementComponent->MaxSpeed=1500;
+	ProjectileMovementComponent->ProjectileGravityScale=0;
 }
 
 void AEnemyProjectile::BeginPlay()

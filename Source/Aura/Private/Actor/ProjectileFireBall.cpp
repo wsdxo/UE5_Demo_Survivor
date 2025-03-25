@@ -46,7 +46,7 @@ void AProjectileFireBall::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedCo
 {
 	if (AAuraEnemy* Enemy = Cast<AAuraEnemy>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,TEXT("命中敌人"));
+		//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Green,TEXT("命中敌人"));
 		ApplyEffectToTarget(Enemy, InstantGameplayEffectClass);
 		Destroy();
 	}

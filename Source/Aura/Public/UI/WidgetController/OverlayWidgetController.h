@@ -29,7 +29,7 @@ public:
 	UPROPERTY(BlueprintAssignable,Category="GAS|Attributes")
 	FOnAttributeChangedSignature OnMaxHealthChanged;
 
-	UPROPERTY(BlueprintAssignable,Category="GAS|XP")
+	UPROPERTY(BlueprintAssignable,Category="GAS|Attributes")
 	FOnAttributeChangedSignature OnXPPercentChanged;
 
 protected:
